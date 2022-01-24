@@ -62,7 +62,7 @@ class BarcodeMask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        edgeRadiusOffset: props.edgeRadius ? -Math.abs(props.edgeRadius / 3) : 0
+      edgeRadiusOffset: props.edgeRadius ? -Math.abs(props.edgeRadius / 3) : 0
     };
   }
 
@@ -90,7 +90,7 @@ class BarcodeMask extends React.Component {
   };
 
   _animateLoop = () => {
-    const { 
+    const {
       animatedLineOrientation,
       lineAnimationDuration,
       useNativeDriver
@@ -101,18 +101,18 @@ class BarcodeMask extends React.Component {
     const startValue = -lineTravelWindowDistance;
     const endValue = lineTravelWindowDistance;
     this.animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(this.state[propertyToChange], {
-          toValue: endValue,
-          duration: lineAnimationDuration,
-          useNativeDriver
-        }),
-        Animated.timing(this.state[propertyToChange], {
-          toValue: startValue,
-          duration: lineAnimationDuration,
-          useNativeDriver
-        })
-      ])
+        Animated.sequence([
+          Animated.timing(this.state[propertyToChange], {
+            toValue: endValue,
+            duration: lineAnimationDuration,
+            useNativeDriver
+          }),
+          Animated.timing(this.state[propertyToChange], {
+            toValue: startValue,
+            duration: lineAnimationDuration,
+            useNativeDriver
+          })
+        ])
     );
     this.animation.start();
   }
@@ -126,9 +126,9 @@ class BarcodeMask extends React.Component {
     const { edgeWidth, edgeHeight, edgeColor, edgeBorderWidth, edgeRadius } = this.props;
     const { edgeRadiusOffset } = this.state;
     const defaultStyle = {
-        width: edgeWidth,
-        height: edgeHeight,
-        borderColor: edgeColor
+      width: edgeWidth,
+      height: edgeHeight,
+      borderColor: edgeColor
     };
     const edgeBorderStyle = {
       topRight: {
@@ -171,23 +171,23 @@ class BarcodeMask extends React.Component {
     const { animatedLineOrientation, onLayoutMeasured } = this.props;
     const { layout } = nativeEvent;
     const isHorizontal = animatedLineOrientation !== 'vertical';
-    const travelDistance = this._calculateLineTravelWindowDistance({ 
-        layout, 
-        isHorizontalOrientation: isHorizontal,
+    const travelDistance = this._calculateLineTravelWindowDistance({
+      layout,
+      isHorizontalOrientation: isHorizontal,
     });
     this.setState({
-        top: new Animated.Value(-travelDistance),
-        left: new Animated.Value(-travelDistance),
-        lineTravelWindowDistance: travelDistance, 
-        finderLayout: layout,
+      top: new Animated.Value(-travelDistance),
+      left: new Animated.Value(-travelDistance),
+      lineTravelWindowDistance: travelDistance,
+      finderLayout: layout,
     })
     if (onLayoutMeasured) {
-        onLayoutMeasured({ nativeEvent });
+      onLayoutMeasured({ nativeEvent });
     }
   }
 
   render() {
-    const { 
+    const {
       width,
       height,
       showAnimatedLine,
@@ -207,41 +207,41 @@ class BarcodeMask extends React.Component {
     };
     const { finderLayout, top, left } = this.state;
     if (finderLayout && animatedLineOrientation !== 'vertical') {
-        animatedLineStyle.transform = [{ 
-            translateY: top
-        }]
+      animatedLineStyle.transform = [{
+        translateY: top
+      }]
     } else if (finderLayout) {
-        animatedLineStyle.transform = [{ 
-            translateX: left
-        }]
+      animatedLineStyle.transform = [{
+        translateX: left
+      }]
     }
 
     return (
-      <View style={[styles.container]}>
-        <View
-          style={[ styles.finder, { width, height } ]}
-          onLayout={this._onFinderLayoutMeasured}
-        >
-          {this._renderEdge('topLeft')}
-          {this._renderEdge('topRight')}
-          {this._renderEdge('bottomLeft')}
-          {this._renderEdge('bottomRight')}
-          {showAnimatedLine && (
-            <Animated.View
-              style={[ styles.animatedLine, animatedLineStyle ]}
-            />
-          )}
-        </View>
-        <View style={styles.maskOuter}>
-          <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
-          <View style={[{ height }, styles.maskCenter]} >
-            <View style={[this._applyMaskFrameStyle()]} />
-            <View style={[ styles.maskInner, { width, height } ]} />
-            <View style={[this._applyMaskFrameStyle()]} />
+        <View style={[styles.container]}>
+          <View style={[styles.maskOuter,  {zIndex: 0}]}>
+            <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
+            <View style={[{ height }, styles.maskCenter]} >
+              <View style={[this._applyMaskFrameStyle()]} />
+              <View style={[ styles.maskInner, { width, height } ]} />
+              <View style={[this._applyMaskFrameStyle()]} />
+            </View>
+            <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
           </View>
-          <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
+          <View
+              style={[ styles.finder, { width, height } ]}
+              onLayout={this._onFinderLayoutMeasured}
+          >
+            {this._renderEdge('topLeft')}
+            {this._renderEdge('topRight')}
+            {this._renderEdge('bottomLeft')}
+            {this._renderEdge('bottomRight')}
+            {showAnimatedLine && (
+                <Animated.View
+                    style={[ styles.animatedLine, animatedLineStyle ]}
+                />
+            )}
+          </View>
         </View>
-      </View>
     );
   }
 
